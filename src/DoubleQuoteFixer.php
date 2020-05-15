@@ -29,7 +29,7 @@ final class DoubleQuoteFixer extends AbstractFixer implements ConfigurationDefin
 <?php
 
 $a = 'sample';
-$b = 'sample with "single-quotes"';
+$b = 'sample with "double-quotes"';
 
 EOF;
         return new FixerDefinition(
