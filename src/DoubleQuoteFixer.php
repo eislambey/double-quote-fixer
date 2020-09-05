@@ -82,8 +82,7 @@ EOF;
             if (
                 "'" === $content[0] &&
                 (true === $this->configuration["strings_containing_double_quote_chars"] || false === strpos($content, "\"")) &&
-                // regex: odd number of backslashes, not followed by double quotew or dollar
-                !Preg::match("/(?<!\\\\)(?:\\\\{2})*\\\\(?!['$\\\\])/", $content)
+                false === strpos($content, "\\$")
             ) {
                 $content = substr($content, 1, -1);
                 $content = str_replace(["\'", "$", "\""], ["'", "\\$", "\\\""], $content);

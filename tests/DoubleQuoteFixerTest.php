@@ -106,6 +106,63 @@ EOF
         ];
     }
 
+    /**
+     * @param string      $expected
+     * @param null|string $input
+     *
+     * @dataProvider provideTestDoubleQuoteFixCases
+     */
+    public function testDoubleQuoteFix($expected, $input = null)
+    {
+        $this->fixer->configure([
+            "strings_containing_double_quote_chars" => true,
+        ]);
+
+        $this->doTest($expected, $input);
+    }
+
+    public function provideTestDoubleQuoteFixCases()
+    {
+        return [
+            [
+                '<?php $a = "foo \\\\\"bar\\\\\"";',
+                '<?php $a = \'foo \\\"bar\\\"\';',
+            ],
+            [
+                <<<'EOT'
+<?php
+// none
+$a = "start \" end";
+// one escaped baskslash
+$b = "start \\\" end";
+// two escaped baskslash
+$c = "start \\\\\" end";
+EOT
+                ,
+                <<<'EOT'
+<?php
+// none
+$a = 'start " end';
+// one escaped baskslash
+$b = 'start \\" end';
+// two escaped baskslash
+$c = 'start \\\\" end';
+EOT
+                ,
+            ],
+            [
+                <<<'EOT'
+<?php
+// one unescaped backslash
+$a = 'start \" end';
+// one escaped + one unescaped baskslash
+$b = 'start \\\" end';
+EOT
+                ,
+            ],
+        ];
+    }
+
     /** @inheritDoc */
     protected function createFixer()
     {
